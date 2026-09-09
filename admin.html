@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TikTok Rating Advisor Admin</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{
+background:#050811;
+color:#fff;
+display:flex;
+justify-content:center;
+padding:40px 20px;
+}
+.container{width:100%;max-width:900px}
+.card{
+background:#111722;
+border:1px solid #22324a;
+border-radius:20px;
+padding:28px;
+margin-bottom:24px;
+}
+h1{color:#ff6b00;margin-bottom:8px}
+input{
+width:100%;
+padding:14px;
+margin:12px 0;
+border:none;
+border-radius:10px;
+background:#232d3d;
+color:white;
+}
+button{
+background:#ff6b00;
+color:white;
+border:none;
+padding:14px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
+button:hover{opacity:.9}
+.result{
+margin-top:18px;
+background:#0d131d;
+padding:16px;
+border-radius:12px;
+white-space:pre-line;
+display:none;
+}
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+th,td{
+padding:12px;
+border-bottom:1px solid #273244;
+text-align:left;
+}
+th{color:#ffb36c}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+<h1>Admin Dashboard</h1>
+<p>Generate akun customer TikTok Rating Advisor.</p>
+
+<input id="email" placeholder="Email Customer">
+
+<button onclick="createUser()">Generate Akun</button>
+
+<div id="result" class="result"></div>
+</div>
+
+<div class="card">
+<h2>Daftar Customer</h2>
+
+<table>
+<thead>
+<tr>
+<th>Email</th>
+<th>License</th>
+<th>Status</th>
+<th>Device</th>
+</tr>
+</thead>
+
+<tbody id="userTable">
+<tr><td colspan="4">Belum ada data.</td></tr>
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+async function createUser(){
+
+const email=document.getElementById("email").value.trim();
+
+const res=await fetch("https://rating-tiktok-advisor-api.bennywenngo.workers.dev/create-user",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({email})
+});
+
+const data=await res.json();
+
+const box=document.getElementById("result");
+
+box.style.display="block";
+
+if(data.success){
+
+box.innerHTML=
+`✅ AKUN BERHASIL DIBUAT
+
+Email:
+${data.email}
+
+Password:
+${data.password}
+
+License:
+${data.license}`;
+
+loadUsers();
+
+}else{
+
+box.innerHTML=`❌ ${data.error}`;
+
+}
+
+}
+
+async function loadUsers(){
+
+const tbody=document.getElementById("userTable");
+
+tbody.innerHTML=`<tr><td colspan="4">Loading...</td></tr>`;
+
+}
+loadUsers();
+</script>
+
+</body>
+</html>
