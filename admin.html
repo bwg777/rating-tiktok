@@ -133,34 +133,35 @@ th{
 </div>
 
 <script>
-const API="https://rating-tiktok-advisor-api.bennywenngo.workers.dev";
+const API = "https://rating-tiktok-advisor-api.bennywenngo.workers.dev";
 
 async function createUser(){
 
-  const email=document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value.trim();
 
   if(!email){
     alert("Masukkan email.");
     return;
   }
 
-  const res=await fetch(API+"/create-user",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({email})
-  });
+  try{
 
-  const data=await res.json();
+    const res = await fetch(API + "/create-user",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({ email })
+    });
 
-  const box=document.getElementById("result");
+    const data = await res.json();
 
-  box.style.display="block";
+    const box = document.getElementById("result");
+    box.style.display="block";
 
-  if(data.success){
+    if(data.success){
 
-    box.innerHTML=`✅ AKUN BERHASIL DIBUAT
+      box.innerHTML=`✅ AKUN BERHASIL DIBUAT
 
 Email:
 ${data.email}
@@ -171,13 +172,20 @@ ${data.password}
 License:
 ${data.license}`;
 
-    document.getElementById("email").value="";
+      document.getElementById("email").value="";
 
-    loadUsers();
+      loadUsers();
 
-  }else{
+    }else{
 
-    box.innerHTML=`❌ ${data.error || "Gagal membuat akun."}`;
+      box.innerHTML=`❌ ${data.error || "Gagal membuat akun."}`;
+
+    }
+
+  }catch(err){
+
+    alert("Gagal terhubung ke API.");
+    console.error(err);
 
   }
 
@@ -185,15 +193,17 @@ ${data.license}`;
 
 async function loadUsers(){
 
-  const tbody=document.getElementById("userTable");
+  const tbody = document.getElementById("userTable");
 
   tbody.innerHTML='<tr><td colspan="4">Loading...</td></tr>';
 
   try{
 
-    const res=await fetch(API+"/users");
+    const res = await fetch(API + "/users?t=" + Date.now());
 
-    const users=await res.json();
+    const users = await res.json();
+
+    console.log("Users:", users);
 
     if(!Array.isArray(users)){
       tbody.innerHTML='<tr><td colspan="4">Gagal mengambil data.</td></tr>';
