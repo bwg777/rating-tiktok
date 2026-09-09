@@ -118,20 +118,21 @@ async function login(email, password) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ email, password })
+  // Login ke API Cloudflare
+async function login(email, password) {
+  const res = await fetch("https://rating-tiktok-advisor-api.bennywenngo.workers.dev/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, password })
   });
 
   return await res.json();
 }
-async function doLogin() {  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
 
-  const res = await login(email, password);
-  const msg = document.getElementById("loginMsg");
-
- 1if (res.success) {
-  localStorage.setItem("tra_token", res.token);
-  dasync function doLogin() {
-  const email = document.getElementById("email").value;
+async function doLogin() {
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const msg = document.getElementById("loginMsg");
 
@@ -145,16 +146,19 @@ async function doLogin() {  const email = document.getElementById("email").value
       document.getElementById("loginOverlay").style.display = "none";
       history.replaceState({}, "", "/");
     } else {
-      msg.textContent = res.message || "Login gagal";
+      msg.textContent = res.message || "Email atau password salah";
     }
   } catch (err) {
-    msg.textContent = "Tidak bisa terhubung ke server.";
+    msg.textContent = "Gagal terhubung ke server.";
     console.error(err);
   }
 }
 
 window.addEventListener("load", () => {
   if (localStorage.getItem("tra_token")) {
+    document.getElementById("loginOverlay").style.display = "none";
+  }
+});
     document.getElementById("loginOverlay").style.display = "none";
   }
 });
