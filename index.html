@@ -128,12 +128,14 @@ async function doLogin() {  const email = document.getElementById("email").value
   const res = await login(email, password);
   const msg = document.getElementById("loginMsg");
 
- 131 if (res.success) {
-132   localStorage.setItem("tra_token", res.token);
-133   document.getElementById("loginOverlay").style.display = "none";
-134   history.replaceState({}, "", "/");
-135 } else {
-136   msg.textContent = res.message;
+ 1if (res.success) {
+  localStorage.setItem("tra_token", res.token);
+  document.getElementById("loginOverlay").style.display = "none";
+  history.replaceState({}, "", "/");
+} else {
+  msg.textContent = res.message;
+}
+                          
 137 }
   }
 }
