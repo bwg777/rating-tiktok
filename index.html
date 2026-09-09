@@ -110,6 +110,18 @@ output.innerHTML=`<div class="card"><h2>📊 Recovery Report</h2>
 <div class="plan red"><span class="badge">Agresif</span><h3>🔴 Mode Recovery Cepat</h3><ul><li>Target sekitar <b>+${need30}</b> order.</li><li>Cocok untuk seller yang sedang mengejar campaign.</li></ul></div>
 <div class="plan orange"><span class="badge">Prioritas Recovery</span><h3>${near>=2?"🟢 Tunggu Window + Kejar Order Ringan":"🔴 Fokus Kejar Completed Order"}</h3><p>${near>=2?`Ada ${near} review yang akan keluar dalam ≤15 hari.`:"Review masih relatif baru."}</p><ul><li>Biarkan ${progress} order yang sedang berjalan selesai.</li><li>Target setelah ${nearest} hari turun menjadi sekitar <b>+${futureNeed}</b> order.</li><li>Hindari review negatif baru.</li></ul></div></div>`;}
 calculate();
+  // Login ke API Cloudflare
+async function login(email, password) {
+  const res = await fetch("https://rating-tiktok-advisor-api.bennywenngo.workers.dev/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, password })
+  });
+
+  return await res.json();
+}
 </script>
 </body>
 </html>
