@@ -102,7 +102,72 @@ th{color:#ffb36c}
 
 </div>
 
-<script>
+<script><script>
+const API = "https://rating-tiktok-advisor-api.bennywenngo.workers.dev";
+
+async function createUser(){
+  const email = document.getElementById("email").value.trim();
+
+  if(!email){
+    alert("Masukkan email.");
+    return;
+  }
+
+  const res = await fetch(API + "/create-user",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({ email })
+  });
+
+  const data = await res.json();
+
+  if(data.success){
+    alert(
+      `Akun berhasil dibuat!\n\nEmail: ${data.email}\nPassword: ${data.password}\nLicense: ${data.license}`
+    );
+    document.getElementById("email").value="";
+    loadUsers();
+  }else{
+    alert(data.error || "Gagal membuat akun.");
+  }
+}
+
+async function loadUsers(){
+  const tbody = document.getElementById("userTable");
+  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+  try{
+    const res = await fetch(API + "/users");
+    const users = await res.json();
+
+    if(!Array.isArray(users)){
+      tbody.innerHTML = "<tr><td colspan='4'>Gagal mengambil data.</td></tr>";
+      return;
+    }
+
+    tbody.innerHTML = "";
+
+    users.forEach(u=>{
+      tbody.innerHTML += `
+        <tr>
+          <td>${u.email}</td>
+          <td>${u.license_key}</td>
+          <td>${u.is_active ? "Aktif" : "Nonaktif"}</td>
+          <td>${u.device_id || "-"}</td>
+        </tr>
+      `;
+    });
+
+  }catch(err){
+    tbody.innerHTML = "<tr><td colspan='4'>Error koneksi.</td></tr>";
+    console.error(err);
+  }
+}
+
+loadUsers();
+</script>
 async function createUser(){
 
 const email=document.getElementById("email").value.trim();
