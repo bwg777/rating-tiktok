@@ -6,61 +6,92 @@
 <title>TikTok Rating Advisor Admin</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,Arial,sans-serif;
+}
+
 body{
-background:#050811;
-color:#fff;
-display:flex;
-justify-content:center;
-padding:40px 20px;
+  background:#050811;
+  color:white;
+  display:flex;
+  justify-content:center;
+  padding:40px 20px;
 }
-.container{width:100%;max-width:900px}
+
+.container{
+  width:100%;
+  max-width:900px;
+}
+
 .card{
-background:#111722;
-border:1px solid #22324a;
-border-radius:20px;
-padding:28px;
-margin-bottom:24px;
+  background:#111722;
+  border:1px solid #22324a;
+  border-radius:20px;
+  padding:28px;
+  margin-bottom:24px;
 }
-h1{color:#ff6b00;margin-bottom:8px}
+
+h1{
+  color:#ff6b00;
+  margin-bottom:8px;
+}
+
+h2{
+  margin-bottom:18px;
+}
+
 input{
-width:100%;
-padding:14px;
-margin:12px 0;
-border:none;
-border-radius:10px;
-background:#232d3d;
-color:white;
+  width:100%;
+  padding:14px;
+  margin:14px 0;
+  border:none;
+  border-radius:10px;
+  background:#232d3d;
+  color:white;
 }
+
 button{
-background:#ff6b00;
-color:white;
-border:none;
-padding:14px 18px;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
+  background:#ff6b00;
+  color:white;
+  border:none;
+  padding:14px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
 }
-button:hover{opacity:.9}
+
+button:hover{
+  opacity:.9;
+}
+
 .result{
-margin-top:18px;
-background:#0d131d;
-padding:16px;
-border-radius:12px;
-white-space:pre-line;
-display:none;
+  display:none;
+  margin-top:18px;
+  background:#0d131d;
+  border:1px solid #243246;
+  border-radius:12px;
+  padding:18px;
+  white-space:pre-line;
 }
+
 table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
+  width:100%;
+  border-collapse:collapse;
+  margin-top:18px;
 }
+
 th,td{
-padding:12px;
-border-bottom:1px solid #273244;
-text-align:left;
+  padding:12px;
+  border-bottom:1px solid #273244;
+  text-align:left;
 }
-th{color:#ffb36c}
+
+th{
+  color:#ffb36c;
+}
 </style>
 </head>
 
@@ -93,103 +124,43 @@ th{color:#ffb36c}
 </thead>
 
 <tbody id="userTable">
-<tr><td colspan="4">Belum ada data.</td></tr>
+<tr><td colspan="4">Loading...</td></tr>
 </tbody>
 
 </table>
-
 </div>
 
 </div>
 
-<script><script>
-const API = "https://rating-tiktok-advisor-api.bennywenngo.workers.dev";
+<script>
+const API="https://rating-tiktok-advisor-api.bennywenngo.workers.dev";
 
 async function createUser(){
-  const email = document.getElementById("email").value.trim();
+
+  const email=document.getElementById("email").value.trim();
 
   if(!email){
     alert("Masukkan email.");
     return;
   }
 
-  const res = await fetch(API + "/create-user",{
+  const res=await fetch(API+"/create-user",{
     method:"POST",
     headers:{
       "Content-Type":"application/json"
     },
-    body:JSON.stringify({ email })
+    body:JSON.stringify({email})
   });
 
-  const data = await res.json();
+  const data=await res.json();
+
+  const box=document.getElementById("result");
+
+  box.style.display="block";
 
   if(data.success){
-    alert(
-      `Akun berhasil dibuat!\n\nEmail: ${data.email}\nPassword: ${data.password}\nLicense: ${data.license}`
-    );
-    document.getElementById("email").value="";
-    loadUsers();
-  }else{
-    alert(data.error || "Gagal membuat akun.");
-  }
-}
 
-async function loadUsers(){
-  const tbody = document.getElementById("userTable");
-  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
-
-  try{
-    const res = await fetch(API + "/users");
-    const users = await res.json();
-
-    if(!Array.isArray(users)){
-      tbody.innerHTML = "<tr><td colspan='4'>Gagal mengambil data.</td></tr>";
-      return;
-    }
-
-    tbody.innerHTML = "";
-
-    users.forEach(u=>{
-      tbody.innerHTML += `
-        <tr>
-          <td>${u.email}</td>
-          <td>${u.license_key}</td>
-          <td>${u.is_active ? "Aktif" : "Nonaktif"}</td>
-          <td>${u.device_id || "-"}</td>
-        </tr>
-      `;
-    });
-
-  }catch(err){
-    tbody.innerHTML = "<tr><td colspan='4'>Error koneksi.</td></tr>";
-    console.error(err);
-  }
-}
-
-loadUsers();
-</script>
-async function createUser(){
-
-const email=document.getElementById("email").value.trim();
-
-const res=await fetch("https://rating-tiktok-advisor-api.bennywenngo.workers.dev/create-user",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({email})
-});
-
-const data=await res.json();
-
-const box=document.getElementById("result");
-
-box.style.display="block";
-
-if(data.success){
-
-box.innerHTML=
-`✅ AKUN BERHASIL DIBUAT
+    box.innerHTML=`✅ AKUN BERHASIL DIBUAT
 
 Email:
 ${data.email}
@@ -200,75 +171,59 @@ ${data.password}
 License:
 ${data.license}`;
 
-loadUsers();
+    document.getElementById("email").value="";
 
-}else{
+    loadUsers();
 
-box.innerHTML=`❌ ${data.error}`;
+  }else{
 
-}
+    box.innerHTML=`❌ ${data.error || "Gagal membuat akun."}`;
+
+  }
 
 }
 
 async function loadUsers(){
 
   const tbody=document.getElementById("userTable");
+
   tbody.innerHTML='<tr><td colspan="4">Loading...</td></tr>';
 
   try{
 
-    const res=await fetch("https://rating-tiktok-advisor-api.bennywenngo.workers.dev/users");
+    const res=await fetch(API+"/users");
+
     const users=await res.json();
+
+    if(!Array.isArray(users)){
+      tbody.innerHTML='<tr><td colspan="4">Gagal mengambil data.</td></tr>';
+      return;
+    }
 
     tbody.innerHTML="";
 
     users.forEach(u=>{
 
       tbody.innerHTML+=`
-        <tr>
-          <td>${u.email}</td>
-          <td>${u.license_key}</td>
-          <td>${u.is_active ? "🟢 Aktif" : "🔴 Nonaktif"}</td>
-          <td>${u.device_id ? "📱 Terikat" : "⚪ Belum Login"}</td>
-        </tr>
-      `;
+      <tr>
+        <td>${u.email}</td>
+        <td>${u.license_key}</td>
+        <td>${u.is_active ? "🟢 Aktif" : "🔴 Nonaktif"}</td>
+        <td>${u.device_id ? "📱 Terikat" : "⚪ Belum Login"}</td>
+      </tr>`;
 
     });
 
   }catch(err){
 
-    tbody.innerHTML='<tr><td colspan="4">Gagal memuat data.</td></tr>';
+    tbody.innerHTML='<tr><td colspan="4">Error koneksi.</td></tr>';
+
+    console.error(err);
 
   }
 
 }
 
-    const res = await fetch("https://rating-tiktok-advisor-api.bennywenngo.workers.dev/users");
-    const users = await res.json();
-
-    tbody.innerHTML = "";
-
-    users.forEach(u => {
-
-      tbody.innerHTML += `
-        <tr>
-          <td>${u.email}</td>
-          <td>${u.license_key}</td>
-          <td>${u.is_active ? "🟢 Aktif" : "🔴 Nonaktif"}</td>
-          <td>${u.device_id ? "📱 Terikat" : "⚪ Belum Login"}</td>
-        </tr>
-      `;
-
-    });
-
-  }catch(err){
-
-    tbody.innerHTML = '<tr><td colspan="4">Gagal memuat data.</td></tr>';
-
-  }
-
-}
-}
 loadUsers();
 </script>
 
