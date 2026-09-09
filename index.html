@@ -112,11 +112,26 @@ output.innerHTML=`<div class="card"><h2>📊 Recovery Report</h2>
 calculate();
   // Login ke API Cloudflare
 async function login(email, password) {
-  const res = await fetch("https://rating-tiktok-advisor-api.bennywenngo.workers.dev/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  });
+  const deviceId =
+    localStorage.getItem("device_id") || crypto.randomUUID();
+
+  localStorage.setItem("device_id", deviceId);
+
+  const res = await fetch(
+    "https://rating-tiktok-advisor-api.bennywenngo.workers.dev/login",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        deviceId
+      })
+    }
+  );
+
   return await res.json();
 }
 
