@@ -130,13 +130,26 @@ async function doLogin() {  const email = document.getElementById("email").value
 
  1if (res.success) {
   localStorage.setItem("tra_token", res.token);
-  document.getElementById("loginOverlay").style.display = "none";
-  history.replaceState({}, "", "/");
-} else {
-  msg.textContent = res.message;
-}
-                          
-137 }
+  dasync function doLogin() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("loginMsg");
+
+  msg.textContent = "";
+
+  try {
+    const res = await login(email, password);
+
+    if (res.success) {
+      localStorage.setItem("tra_token", res.token);
+      document.getElementById("loginOverlay").style.display = "none";
+      history.replaceState({}, "", "/");
+    } else {
+      msg.textContent = res.message || "Login gagal";
+    }
+  } catch (err) {
+    msg.textContent = "Tidak bisa terhubung ke server.";
+    console.error(err);
   }
 }
 
@@ -145,13 +158,6 @@ window.addEventListener("load", () => {
     document.getElementById("loginOverlay").style.display = "none";
   }
 });
-  
-</script>
-
-<div id="loginOverlay" style="position:fixed;inset:0;background:#0F1115;display:flex;justify-content:center;align-items:center;z-index:9999;">
-  <div style="width:360px;background:#171C22;padding:30px;border-radius:18px;border:1px solid #273244;">
-
-    <h2 style="color:#FF6B00;margin:0 0 20px;">TikTok Rating Advisor</h2>
 
     <input id="email" type="email" placeholder="Email"
       style="width:100%;padding:12px;margin-bottom:12px;border-radius:10px;border:none;background:#242A33;color:white;">
