@@ -28,6 +28,7 @@ table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px s
 .plan{border-radius:18px;padding:18px;margin-top:16px}.green{background:#173326;border:1px solid #2F7A53}.yellow{background:#3B2E12;border:1px solid #A68A28}.red{background:#3B1717;border:1px solid #A83D3D}.orange{background:linear-gradient(135deg,#FF7A1A,#FF922E)}
 .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.16);font-size:12px;margin-bottom:10px}
 .small{color:#9CA8B6;font-size:13px;line-height:1.6}
+.wa-btn{width:100%;margin-top:10px;background:#25D366!important}.wa-btn:hover{opacity:.9}
 @media(max-width:720px){.grid3{grid-template-columns:1fr}.hero h1{font-size:30px}.container{padding:18px}}
 </style>
 </head>
@@ -158,6 +159,13 @@ async function doLogin() {
   }
 }
 
+function goWA(){const phone="6287887788017";const text=encodeURIComponent(`Halo Admin TikTok Rating Advisor.
+
+Saya ingin aktivasi akun.
+
+Email saya:
+`);window.open(`https://wa.me/${phone}?text=${text}`,"_blank");}
+
 window.addEventListener("load", () => {
   if (localStorage.getItem("tra_token")) {
     document.getElementById("loginOverlay").style.display = "none";
@@ -179,6 +187,8 @@ window.addEventListener("load", () => {
       style="width:100%;padding:12px;border:none;border-radius:10px;background:#FF6B00;color:white;font-weight:bold;cursor:pointer;">
       Masuk
     </button>
+
+    <button class="wa-btn" onclick="goWA()" style="width:100%;padding:12px;border:none;border-radius:10px;color:white;font-weight:bold;cursor:pointer;">💬 Aktivasi Akun via WhatsApp</button>
 
     <p id="loginMsg" style="color:#ff6b6b;margin-top:12px;"></p>
   </div>
