@@ -38,7 +38,8 @@ function removeReview(btn){
 
 function calculate(){
 
-const completed=+document.getElementById("orders").value||0; const transit=+document.getElementById("transit").value||0;
+ const completed=+document.getElementById("orders").value||0;
+ const transit=+document.getElementById("transit").value||0;
  const delivered=+document.getElementById("delivered").value||0;
  const returns=+document.getElementById("returns").value||0;
 
@@ -145,8 +146,7 @@ score=Math.max(0,Math.min(100,score));
 // OUTPUT
 // =========================
 
-document.getElementById("output").innerHTML=`
-<div class="card">
+document.getElementById("output").innerHTML=`<div class="card">
 
 <h2>📊 Recovery Report</h2>
 
@@ -175,7 +175,9 @@ document.getElementById("output").innerHTML=`
 </div>
 
 <div class="box">
+
 <table>
+
 <tr><td>Completed Order</td><td>${completed}</td></tr>
 <tr><td>Pesanan Transit</td><td>${transit}</td></tr>
 <tr><td>Pesanan Terkirim</td><td>${delivered}</td></tr>
@@ -186,7 +188,9 @@ document.getElementById("output").innerHTML=`
 <tr><td>Target TikTok</td><td>0.30%</td></tr>
 <tr><td><b>Return Rate</b></td><td><b>${ret.toFixed(2)}%</b></td></tr>
 <tr><td>Target Return</td><td>0.40%</td></tr>
+
 </table>
+
 </div>
 
 <div class="box">
@@ -194,6 +198,7 @@ document.getElementById("output").innerHTML=`
 <h3>📅 Kalender Recovery</h3>
 
 <table>
+
 <tr>
 <th>Review</th>
 <th>Keluar Window</th>
