@@ -1,369 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TikTok Rating Advisor</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0F1115;color:#fff;font-family:Inter,Arial,sans-serif}
+.container{max-width:920px;margin:auto;padding:24px}.hero{background:linear-gradient(135deg,#111827,#0F1115);border:1px solid #273244;border-radius:26px;padding:30px;margin-bottom:22px}
+h1{margin:0;color:#FF6B00;font-size:40px}p{color:#9CA8B6}.notice{margin-top:18px;background:rgba(255,255,255,.04);border:1px solid #2A3442;border-radius:18px;padding:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.kpi{padding:16px;border-radius:14px;text-align:center;background:#171C22;border:1px solid #2A3442}.active{background:rgba(255,107,0,.12);border-color:#FF6B00}
+.card{background:#181C22;border:1px solid #262F3A;border-radius:22px;padding:24px;margin-bottom:22px}
+input{width:100%;padding:13px;background:#242A33;border:1px solid transparent;border-radius:12px;color:#fff;margin-bottom:14px}input:focus{outline:none;border-color:#FF6B00}
+.review{display:flex;gap:10px;align-items:center;margin-bottom:10px}.review input{flex:1;margin-bottom:0}
+button{padding:12px 16px;border:none;border-radius:10px;cursor:pointer;color:#fff;font-weight:700}.primary{background:#FF6B00}.secondary{background:#242A33}.deleteBtn{width:42px;height:42px;background:#2A3442}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric{background:#171C22;border:1px solid #2A3442;border-radius:16px;padding:16px;text-align:center}.metric h2{margin:0;color:#FF6B00}
+.box{background:#13181F;border:1px solid #273244;border-radius:16px;padding:16px;margin-top:18px}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #273244;text-align:left}.small{font-size:13px;color:#9CA8B6}
+.plan{border-radius:18px;padding:18px;margin-top:16px;border:1px solid}.green{background:#123522;border-color:#2F8F5B}.yellow{background:#4A3405;border-color:#C79211}.red{background:#441212;border-color:#C0392B}.orange{background:#8A4B08;border-color:#F39C12}.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12px;margin-bottom:10px}
+@media(max-width:768px){.grid3,.cards{grid-template-columns:1fr 1fr}}@media(max-width:520px){.grid3,.cards{grid-template-columns:1fr}h1{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="hero">
+<h1>TikTok Rating Advisor</h1>
+<p>Strategi recovery Rating Produk TikTok Shop berdasarkan rolling window 60 hari.</p>
+<div class="notice"><b>⚠️ Fokus Produk (60%)</b><p>Tools ini menghitung metrik produk dengan simulasi rolling window 60 hari.</p><div class="grid3"><div class="kpi active">📦 Produk<br>60%</div><div class="kpi">🚚 Logistik<br>20%</div><div class="kpi">🎧 Layanan<br>20%</div></div></div>
+</div>
+
+<div class="card">
+<h2>Input Data Toko</h2>
+<label>Completed Order (60 Hari)</label><input id="orders" type="number" value="940">
+<label>Pesanan Sedang Transit</label><input id="transit" type="number" value="27">
+<label>Pesanan Sudah Terkirim</label><input id="delivered" type="number" value="38">
+<label>Return karena Seller (60 Hari)</label><input id="returns" type="number" value="4">
+<h3>Daftar Review 1⭐ / 2⭐</h3>
+<div id="reviews"></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="primary" onclick="addReview();calculate()">+ Tambah Review</button><button class="secondary" onclick="calculate()">Analisis Toko</button></div>
+</div>
+
+<div id="output"></div>
+</div>
+
+<script>
 const box=document.getElementById("reviews");
+["2026-07-16","2026-07-23","2026-07-27","2026-07-31","2026-08-13","2026-08-14","2026-08-16","2026-08-30","2026-09-01"].forEach(addReview);
 
-[
-"2026-07-16",
-"2026-07-23",
-"2026-07-27",
-"2026-07-31",
-"2026-08-13",
-"2026-08-14",
-"2026-08-16",
-"2026-08-30",
-"2026-09-01"
-].forEach(addReview);
-
-function addReview(v=""){
-
- const d=document.createElement("div");
- d.className="review";
-
- d.innerHTML=`
- <input type="date" value="${v}">
- <button
- type="button"
- class="deleteBtn"
- onclick="removeReview(this)">✕</button>
- `;
-
- box.appendChild(d);
-
-}
-
-function removeReview(btn){
-
- btn.parentElement.remove();
- calculate();
-
-}
+function addReview(v=""){const d=document.createElement("div");d.className="review";d.innerHTML=`<input type="date" value="${v}" onchange="calculate()"><button type="button" class="deleteBtn" onclick="removeReview(this)">✕</button>`;box.appendChild(d);}
+function removeReview(btn){btn.parentElement.remove();calculate();}
 
 function calculate(){
-
  const completed=+document.getElementById("orders").value||0;
  const transit=+document.getElementById("transit").value||0;
  const delivered=+document.getElementById("delivered").value||0;
  const returns=+document.getElementById("returns").value||0;
-
- const progress=transit+delivered;
- const projected=completed+progress;
-
- let dates=[];
-
- document.querySelectorAll(".review input").forEach(i=>{
-  if(i.value) dates.push(new Date(i.value));
- });
-
- dates.sort((a,b)=>a-b);
-
- const today=new Date();
-
- let active=dates.length;
-
- let near7=0;
- let near15=0;
- let near30=0;
- let nearest=999;
-
- let timeline="";
-
- dates.forEach(d=>{
-
-  let out=new Date(d);
-  out.setDate(out.getDate()+60);
-
-  let remain=Math.ceil((out-today)/86400000);
-
-  if(remain>0&&remain<=7) near7++;
-  if(remain>0&&remain<=15) near15++;
-  if(remain>0&&remain<=30) near30++;
-
-  if(remain>0) nearest=Math.min(nearest,remain);
-
-  timeline+=`
-  <tr>
-   <td>${d.toLocaleDateString("id-ID")}</td>
-   <td>${out.toLocaleDateString("id-ID")}</td>
-   <td>${remain>0?remain+" hari":"Sudah keluar"}</td>
-  </tr>`;
-
- });// =========================
-// SIMULASI ROLLING WINDOW
-// =========================
-
-const after15=Math.max(0,active-near15);
-const after30=Math.max(0,active-near30);
-
-const rate15=((after15/projected)*100)/2;
-const rate30=((after30/projected)*100)/2;
-
-// =========================
-// KPI
-// =========================
-
-const nrr=((active/projected)*100)/2;
-const ret=((returns/projected)*100)/2;
-
-// =========================
-// TARGET ORDER
-// =========================
-
-const need50=Math.max(0,Math.ceil(active/0.01)-projected);
-const need40=Math.max(0,Math.ceil(active/0.008)-projected);
-const need30=Math.max(0,Math.ceil(active/0.006)-projected);
-
-// =========================
-// ADVISOR ENGINE
-// =========================
-
-// Target setelah review ≤15 hari keluar menuju 0.40%
-const afterNeed40=Math.max(0,Math.ceil(after15/0.008)-projected);
-
-// Mode Hemat (tidak pernah 0)
-const hematTarget=
-near15>0
-?Math.max(Math.ceil(progress/2),afterNeed40)
-:Math.max(50,need40);
-
-// Mode Seimbang
-const balanced=
-near15>0
-?Math.ceil((need30+hematTarget)/2)
-:Math.ceil(need30*0.7);
-
-// =========================
-// RECOVERY SCORE
-// =========================
-
-let score=100;
-
-score-=active*7;
-score-=returns*4;
-score+=near15*3;
-score+=progress>50?5:0;
-
-score=Math.max(0,Math.min(100,score));
-
-// =========================
-// OUTPUT
-// =========================
-
-document.getElementById("output").innerHTML=`<div class="card">
-
-<h2>📊 Recovery Report</h2>
-
-<div class="cards">
-
-<div class="metric">
-<h2>${projected}</h2>
-<p>Projected Order</p>
-</div>
-
-<div class="metric">
-<h2>${active}</h2>
-<p>Review Aktif</p>
-</div>
-
-<div class="metric">
-<h2>${nrr.toFixed(2)}%</h2>
-<p>Negative Review</p>
-</div>
-
-<div class="metric">
-<h2>${ret.toFixed(2)}%</h2>
-<p>Return Rate</p>
-</div>
-
-</div>
-
-<div class="box">
-
-<table>
-
-<tr><td>Completed Order</td><td>${completed}</td></tr>
-<tr><td>Pesanan Transit</td><td>${transit}</td></tr>
-<tr><td>Pesanan Terkirim</td><td>${delivered}</td></tr>
-<tr><td><b>On Progress Order</b></td><td><b>${progress}</b></td></tr>
-<tr><td><b>Projected Completed</b></td><td><b>${projected}</b></td></tr>
-<tr><td>Review Aktif</td><td>${active}</td></tr>
-<tr><td><b>Negative Review</b></td><td><b>${nrr.toFixed(2)}%</b></td></tr>
-<tr><td>Target TikTok</td><td>0.30%</td></tr>
-<tr><td><b>Return Rate</b></td><td><b>${ret.toFixed(2)}%</b></td></tr>
-<tr><td>Target Return</td><td>0.40%</td></tr>
-
-</table>
-
-</div>
-
-<div class="box">
-
-<h3>📅 Kalender Recovery</h3>
-
-<table>
-
-<tr>
-<th>Review</th>
-<th>Keluar Window</th>
-<th>Sisa Hari</th>
-</tr>
-
-${timeline}
-
-</table>
-
-</div>
-
-<div class="box">
-
-<h3>📈 Simulasi Rolling Window</h3>
-
-<table>
-
-<tr>
-<td><b>Sekarang</b></td>
-<td>${active} Review</td>
-<td><b>${nrr.toFixed(2)}%</b></td>
-</tr>
-
-<tr>
-<td><b>15 Hari Lagi</b></td>
-<td>${after15} Review</td>
-<td><b>${rate15.toFixed(2)}%</b></td>
-</tr>
-
-<tr>
-<td><b>30 Hari Lagi</b></td>
-<td>${after30} Review</td>
-<td><b>${rate30.toFixed(2)}%</b></td>
-</tr>
-
-</table>
-
-<p class="small">
-Simulasi ini memperkirakan perubahan metrik ketika review mulai keluar dari rolling window 60 hari.
-</p>
-
-</div>
-
-<div class="box">
-
-<h3>🎯 Target Order Bertahap</h3>
-
-<table>
-
-<tr>
-<td>Menuju 0,50%</td>
-<td><b>+${need50}</b></td>
-</tr>
-
-<tr>
-<td>Menuju 0,40%</td>
-<td><b>+${need40}</b></td>
-</tr>
-
-<tr>
-<td>Menuju 0,30%</td>
-<td><b>+${need30}</b></td>
-</tr>
-
-</table>
-
-<p class="small">
-Target di atas menggunakan kondisi saat ini (review yang masih aktif hari ini).
-</p>
-
-</div>
-
-<div class="box">
-
-<h3>⭐ Recovery Score</h3>
-
-<h2>${score}/100</h2>
-
-<p class="small">${
-score>=80
-?"Recovery sangat aman. Rolling window bisa dimanfaatkan."
-:score>=60
-?"Recovery ringan. Fokus menjaga performa."
-:score>=40
-?"Recovery bertahap disarankan."
-:"Recovery agresif diperlukan."
-}</p>
-
-</div>
-
-<h2>🚀 Recovery Plan</h2><!-- Mode Hemat Cost -->
-<div class="plan green">
-
-<span class="badge">Rekomendasi</span>
-
-<h3>🟢 Mode Hemat Cost</h3>
-
-<ul>
-<li>Tunggu sekitar <b>${nearest===999?"beberapa":nearest} hari</b> sampai review terdekat keluar.</li>
-<li>Biarkan <b>${progress}</b> order yang sedang berjalan selesai.</li>
-<li>Setelah rolling window bergeser, target recovery sekitar <b>+${hematTarget}</b> order.</li>
-<li>Evaluasi ulang setelah review berikutnya keluar.</li>
-</ul>
-
-</div>
-
-<!-- Mode Seimbang -->
-<div class="plan yellow">
-
-<span class="badge">Recovery Bertahap</span>
-
-<h3>🟡 Mode Seimbang</h3>
-
-<ul>
-<li>Mulai recovery sekitar <b>+${balanced}</b> order.</li>
-<li>Cocok untuk seller yang tidak ingin menunggu seluruh rolling window.</li>
-<li>Target akan turun lagi setelah review berikutnya keluar.</li>
-</ul>
-
-</div>
-
-<!-- Recovery Cepat -->
-<div class="plan red">
-
-<span class="badge">Agresif</span>
-
-<h3>🔴 Mode Recovery Cepat</h3>
-
-<ul>
-<li>Target sekitar <b>+${need30}</b> order.</li>
-<li>Cocok untuk seller yang sedang mengejar campaign.</li>
-<li>Fokus meningkatkan completed order secepat mungkin.</li>
-</ul>
-
-</div>
-
-<!-- Prioritas Recovery -->
-<div class="plan orange">
-
-<span class="badge">Prioritas Recovery</span>
-
-<h3>${
-near15>=2
-?"🟢 Tunggu Window + Recovery Ringan"
-:"🔴 Fokus Recovery Sekarang"
-}</h3>
-
-<p>${
-near15>=2
-?`Ada ${near15} review yang akan keluar dalam 15 hari. Setelah review tersebut keluar, metrik diproyeksikan turun dari ${nrr.toFixed(2)}% menjadi sekitar ${rate15.toFixed(2)}%.`
-:"Belum ada review yang akan keluar dalam waktu dekat."
-}</p>
-
-<ul>
-<li>Biarkan <b>${progress}</b> order berjalan selesai.</li>
-<li>Tunggu sekitar <b>${nearest===999?"beberapa":nearest} hari</b>.</li>
-<li>Setelah review terdekat keluar, target realistis sekitar <b>+${hematTarget}</b> order.</li>
-<li>Hindari review negatif baru.</li>
-</ul>
-
-</div>
-
-</div>`;
-
+ const progress=transit+delivered,projected=completed+progress;
+ let dates=[];document.querySelectorAll(".review input").forEach(i=>{if(i.value)dates.push(new Date(i.value));});dates.sort((a,b)=>a-b);
+ const today=new Date();let active=dates.length,near15=0,near30=0,nearest=999,timeline="";
+ dates.forEach(d=>{let out=new Date(d);out.setDate(out.getDate()+60);let remain=Math.ceil((out-today)/86400000);if(remain>0&&remain<=15)near15++;if(remain>0&&remain<=30)near30++;if(remain>0)nearest=Math.min(nearest,remain);timeline+=`<tr><td>${d.toLocaleDateString("id-ID")}</td><td>${out.toLocaleDateString("id-ID")}</td><td>${remain>0?remain+" hari":"Sudah keluar"}</td></tr>`;});
+ const after15=Math.max(0,active-near15),after30=Math.max(0,active-near30),rate15=((after15/projected)*100)/2,rate30=((after30/projected)*100)/2,nrr=((active/projected)*100)/2,ret=((returns/projected)*100)/2;
+ const need50=Math.max(0,Math.ceil(active/0.01)-projected),need40=Math.max(0,Math.ceil(active/0.008)-projected),need30=Math.max(0,Math.ceil(active/0.006)-projected);
+ const afterNeed40=Math.max(0,Math.ceil(after15/0.008)-projected),hematTarget=near15>0?Math.max(Math.ceil(progress/2),afterNeed40):Math.max(50,need40),balanced=near15>0?Math.ceil((need30+hematTarget)/2):Math.ceil(need30*0.7);
+ let score=Math.max(0,Math.min(100,100-active*7-returns*4+near15*3+(progress>50?5:0)));
+ document.getElementById("output").innerHTML=`<div class="card"><h2>📊 Recovery Report</h2>
+ <div class="cards"><div class="metric"><h2>${projected}</h2><p>Projected Order</p></div><div class="metric"><h2>${active}</h2><p>Review Aktif</p></div><div class="metric"><h2>${nrr.toFixed(2)}%</h2><p>Negative Review</p></div><div class="metric"><h2>${ret.toFixed(2)}%</h2><p>Return Rate</p></div></div>
+ <div class="box"><table><tr><td>Completed</td><td>${completed}</td></tr><tr><td>On Progress</td><td>${progress}</td></tr><tr><td>Projected</td><td>${projected}</td></tr><tr><td>Review Aktif</td><td>${active}</td></tr><tr><td>Negative Review</td><td>${nrr.toFixed(2)}%</td></tr><tr><td>Return Rate</td><td>${ret.toFixed(2)}%</td></tr></table></div>
+ <div class="box"><h3>📅 Kalender Recovery</h3><table><tr><th>Review</th><th>Keluar Window</th><th>Sisa Hari</th></tr>${timeline}</table></div>
+ <div class="box"><h3>📈 Simulasi Rolling Window</h3><table><tr><td>Sekarang</td><td>${active}</td><td>${nrr.toFixed(2)}%</td></tr><tr><td>15 Hari</td><td>${after15}</td><td>${rate15.toFixed(2)}%</td></tr><tr><td>30 Hari</td><td>${after30}</td><td>${rate30.toFixed(2)}%</td></tr></table></div>
+ <div class="box"><h3>🎯 Target Order</h3><table><tr><td>0.50%</td><td>+${need50}</td></tr><tr><td>0.40%</td><td>+${need40}</td></tr><tr><td>0.30%</td><td>+${need30}</td></tr></table></div>
+ <div class="box"><h3>⭐ Recovery Score</h3><h2>${score}/100</h2></div>
+ <h2>🚀 Recovery Plan</h2>
+ <div class="plan green"><span class="badge">Rekomendasi</span><h3>🟢 Mode Hemat Cost</h3><ul><li>Tunggu sekitar <b>${nearest===999?"beberapa":nearest} hari</b>.</li><li>Biarkan <b>${progress}</b> order berjalan selesai.</li><li>Target setelah rolling window: <b>+${hematTarget}</b>.</li></ul></div>
+ <div class="plan yellow"><span class="badge">Recovery Bertahap</span><h3>🟡 Mode Seimbang</h3><ul><li>Mulai sekitar <b>+${balanced}</b> order.</li></ul></div>
+ <div class="plan red"><span class="badge">Agresif</span><h3>🔴 Recovery Cepat</h3><ul><li>Target <b>+${need30}</b> order.</li></ul></div>
+ <div class="plan orange"><span class="badge">Prioritas Recovery</span><h3>${near15>=2?"🟢 Tunggu Window + Recovery Ringan":"🔴 Fokus Recovery Sekarang"}</h3><p>${near15>=2?`Ada ${near15} review keluar ≤15 hari. Proyeksi turun ke ${rate15.toFixed(2)}%.`:"Belum ada review dekat."}</p></div></div>`;
 }
-
 calculate();
+</script>
+</body></html>
