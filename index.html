@@ -30,10 +30,10 @@ table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px s
 
 <div class="card">
 <h2>Input Data Toko</h2>
-<label>Completed Order (60 Hari)</label><input id="orders" type="number" value="940">
-<label>Pesanan Sedang Transit</label><input id="transit" type="number" value="27">
-<label>Pesanan Sudah Terkirim</label><input id="delivered" type="number" value="38">
-<label>Return karena Seller (60 Hari)</label><input id="returns" type="number" value="4">
+<label>Completed Order (60 Hari)</label><input id="orders" type="number" value="940" oninput="calculate()">
+<label>Pesanan Sedang Transit</label><input id="transit" type="number" value="27" oninput="calculate()">
+<label>Pesanan Sudah Terkirim</label><input id="delivered" type="number" value="38" oninput="calculate()">
+<label>Return karena Seller (60 Hari)</label><input id="returns" type="number" value="4" oninput="calculate()">
 <h3>Daftar Review 1⭐ / 2⭐</h3>
 <div id="reviews"></div>
 <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="primary" onclick="addReview();calculate()">+ Tambah Review</button><button class="secondary" onclick="calculate()">Analisis Toko</button></div>
@@ -70,11 +70,12 @@ function calculate(){
  <div class="box"><h3>🎯 Target Order</h3><table><tr><td>0.50%</td><td>+${need50}</td></tr><tr><td>0.40%</td><td>+${need40}</td></tr><tr><td>0.30%</td><td>+${need30}</td></tr></table></div>
  <div class="box"><h3>⭐ Recovery Score</h3><h2>${score}/100</h2></div>
  <h2>🚀 Recovery Plan</h2>
- <div class="plan green"><span class="badge">Rekomendasi</span><h3>🟢 Mode Hemat Cost</h3><ul><li>Tunggu sekitar <b>${nearest===999?"beberapa":nearest} hari</b>.</li><li>Biarkan <b>${progress}</b> order berjalan selesai.</li><li>Target setelah rolling window: <b>+${hematTarget}</b>.</li></ul></div>
- <div class="plan yellow"><span class="badge">Recovery Bertahap</span><h3>🟡 Mode Seimbang</h3><ul><li>Mulai sekitar <b>+${balanced}</b> order.</li></ul></div>
- <div class="plan red"><span class="badge">Agresif</span><h3>🔴 Recovery Cepat</h3><ul><li>Target <b>+${need30}</b> order.</li></ul></div>
- <div class="plan orange"><span class="badge">Prioritas Recovery</span><h3>${near15>=2?"🟢 Tunggu Window + Recovery Ringan":"🔴 Fokus Recovery Sekarang"}</h3><p>${near15>=2?`Ada ${near15} review keluar ≤15 hari. Proyeksi turun ke ${rate15.toFixed(2)}%.`:"Belum ada review dekat."}</p></div></div>`;
+ <div class="plan green"><span class="badge">Rekomendasi</span><h3>🟢 Mode Hemat Cost</h3><ul><li>Tunggu sekitar <b>${nearest===999?"beberapa":nearest} hari</b>.</li><li>Biarkan <b>${progress}</b> order berjalan selesai.</li><li>Target setelah rolling window sekitar <b>+${hematTarget}</b>.</li><li>Evaluasi ulang setelah review berikutnya keluar.</li></ul></div>
+ <div class="plan yellow"><span class="badge">Recovery Bertahap</span><h3>🟡 Mode Seimbang</h3><ul><li>Mulai recovery sekitar <b>+${balanced}</b> order.</li><li>Cocok untuk seller yang tidak ingin menunggu seluruh rolling window.</li><li>Target akan turun lagi setelah review berikutnya keluar.</li></ul></div>
+ <div class="plan red"><span class="badge">Agresif</span><h3>🔴 Recovery Cepat</h3><ul><li>Target sekitar <b>+${need30}</b> order.</li><li>Cocok untuk seller yang sedang mengejar campaign.</li><li>Fokus meningkatkan completed order secepat mungkin.</li></ul></div>
+ <div class="plan orange"><span class="badge">Prioritas Recovery</span><h3>${near15>=2?"🟢 Tunggu Window + Recovery Ringan":"🔴 Fokus Recovery Sekarang"}</h3><p>${near15>=2?`Ada ${near15} review yang akan keluar dalam 15 hari. Setelah review tersebut keluar, metrik diproyeksikan turun dari ${nrr.toFixed(2)}% menjadi sekitar ${rate15.toFixed(2)}%.`:"Belum ada review yang akan keluar dalam waktu dekat."}</p><ul><li>Biarkan <b>${progress}</b> order berjalan selesai.</li><li>Tunggu sekitar <b>${nearest===999?"beberapa":nearest} hari</b>.</li><li>Target realistis setelah rolling window sekitar <b>+${hematTarget}</b> order.</li><li>Hindari review negatif baru.</li></ul></div></div>`;
 }
 calculate();
 </script>
-</body></html>
+</body>
+</html>
