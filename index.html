@@ -13,10 +13,45 @@ background:#0F1115;
 color:#fff;
 font-family:Inter,Arial,sans-serif;
 }
-.container{max-width:920px;margin:auto;padding:26px}
-.hero{background:linear-gradient(135deg,#111827,#0F1115);border:1px solid #273244;border-radius:26px;padding:30px;margin-bottom:22px}
-.hero h1{margin:0;color:#FF6B00;font-size:40px}
-.hero p{color:#B8C3CF;line-height:1.6}
+
+.container{
+max-width:920px;
+margin:auto;
+padding:26px;
+}
+
+.hero{
+background:linear-gradient(135deg,#111827,#0F1115);
+border:1px solid #273244;
+border-radius:26px;
+padding:30px;
+margin-bottom:22px;
+position:relative;
+}
+
+.logoutBtn{
+position:absolute;
+top:20px;
+right:20px;
+background:#252C35;
+padding:10px 16px;
+border-radius:10px;
+border:none;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+.hero h1{
+margin:0;
+color:#FF6B00;
+font-size:40px;
+}
+
+.hero p{
+color:#B8C3CF;
+line-height:1.6;
+}
 
 .notice{
 margin-top:20px;
@@ -46,8 +81,15 @@ background:rgba(255,107,0,.12);
 border-color:#FF6B00;
 }
 
-.kpi h3{margin:0 0 6px}
-.kpi span{color:#FF6B00;font-weight:bold;font-size:20px}
+.kpi h3{
+margin:0 0 6px;
+}
+
+.kpi span{
+color:#FF6B00;
+font-weight:bold;
+font-size:20px;
+}
 
 .card{
 background:#181C22;
@@ -177,7 +219,12 @@ text-align:left;
 color:#AEB8C5;
 }
 
-.plan{border-radius:18px;padding:18px;margin-top:16px}
+.plan{
+border-radius:18px;
+padding:18px;
+margin-top:16px;
+}
+
 .green{background:#173326;border:1px solid #2F7A53}
 .yellow{background:#3B2E12;border:1px solid #A68A28}
 .red{background:#3B1717;border:1px solid #A83D3D}
@@ -208,26 +255,15 @@ line-height:1.6;
 
 <body>
 
-<script>
-if(!localStorage.getItem("tra_token")){
-location.replace("login.html");
-}
-</script>
-
 <div class="container">
 
 <div class="hero">
 
-<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+<button class="logoutBtn" onclick="logout()">Logout</button>
 
-<div>
 <h1>TikTok Rating Advisor</h1>
+
 <p>Strategi recovery <b>Rating Produk</b> TikTok Shop berdasarkan sistem rolling window 60 hari.</p>
-</div>
-
-<button class="secondary" onclick="logout()">Logout</button>
-
-</div>
 
 <div class="notice">
 
@@ -310,23 +346,20 @@ TikTok menggunakan rolling window 60 hari. Review 1⭐–2⭐ hanya dihitung sel
 // =========================
 // CEK LOGIN
 // =========================
-const token = localStorage.getItem("tra_token");
-if(!token){
-  window.location.replace("login.html");
+if(!localStorage.getItem("tra_token")){
+  window.location.href="login.html";
 }
 
-// Tombol Logout
-const logoutBtn=document.createElement("button");
-logoutBtn.innerText="🚪 Logout";
-logoutBtn.style.cssText="position:fixed;top:20px;right:20px;background:#E5484D;padding:10px 16px;border:none;border-radius:10px;color:white;font-weight:bold;cursor:pointer;z-index:9999";
-logoutBtn.onclick=()=>{
+// =========================
+// LOGOUT
+// =========================
+function logout(){
   localStorage.removeItem("tra_token");
-  window.location.replace("login.html");
-};
-document.body.appendChild(logoutBtn);
+  window.location.href="login.html";
+}
 
 // =========================
-// DATA REVIEW DEFAULT
+// REVIEW DEFAULT
 // =========================
 const box=document.getElementById("reviews");
 
@@ -346,34 +379,46 @@ const box=document.getElementById("reviews");
 // TAMBAH REVIEW
 // =========================
 function addReview(v=""){
+
 const d=document.createElement("div");
+
 d.className="review";
+
 d.innerHTML=`
 <input type="date" value="${v}">
 <button type="button" class="deleteBtn" onclick="removeReview(this)">✕</button>
 `;
+
 box.appendChild(d);
+
 }
 
 // =========================
 // HAPUS REVIEW
 // =========================
 function removeReview(btn){
+
 btn.parentElement.remove();
+
 calculate();
+
 }
 
 // =========================
-// ANALISIS
+// HITUNG RECOVERY
 // =========================
 function calculate(){
 
 const completed=+document.getElementById("orders").value||0;
+
 const transit=+document.getElementById("transit").value||0;
+
 const delivered=+document.getElementById("delivered").value||0;
+
 const returns=+document.getElementById("returns").value||0;
 
 const progress=transit+delivered;
+
 const projected=completed+progress;
 
 let dates=[];
@@ -389,44 +434,63 @@ const today=new Date();
 const active=dates.length;
 
 let near=0;
+
 let nearest=999;
+
 let timeline="";
 
 dates.forEach(d=>{
 
-let e=new Date(d);
-e.setDate(e.getDate()+60);
+let exit=new Date(d);
 
-let r=Math.ceil((e-today)/86400000);
+exit.setDate(exit.getDate()+60);
 
-if(r>0&&r<=15){
+let remain=Math.ceil((exit-today)/86400000);
+
+if(remain>0&&remain<=15){
 near++;
-nearest=Math.min(nearest,r);
+nearest=Math.min(nearest,remain);
 }
 
 timeline+=`
 <tr>
 <td>${d.toLocaleDateString("id-ID")}</td>
-<td>${e.toLocaleDateString("id-ID")}</td>
-<td>${r>0?r+" hari":"Sudah keluar"}</td>
+<td>${exit.toLocaleDateString("id-ID")}</td>
+<td>${remain>0?remain+" hari":"Sudah keluar"}</td>
 </tr>
 `;
 
 });
 
+// =========================
+// METRIK
+// =========================
+
 const nrr=((active/projected)*100)/2;
+
 const ret=((returns/projected)*100)/2;
 
 const after=Math.max(0,active-near);
+
 const afterRate=((after/projected)*100)/2;
 
 const need30=Math.max(0,Math.ceil(active/0.006)-projected);
+
 const need40=Math.max(0,Math.ceil(active/0.008)-projected);
+
 const need50=Math.max(0,Math.ceil(active/0.01)-projected);
 
-const futureNeed=Math.max(0,Math.ceil(after/0.006)-projected);
+// Logic baru biar Hemat Cost nggak jadi +0
+const futureNeed=
+near>0
+?Math.max(0,Math.ceil(after/0.006)-projected)
+:need40;
 
-const balanced=Math.round((need30+futureNeed)/2);
+const balanced=Math.ceil((need30+futureNeed)/2);
+
+// =========================
+// OUTPUT (lanjut di PART 3)
+// =========================
 
 document.getElementById("output").innerHTML=`
 <div class="card">
@@ -523,13 +587,14 @@ Negative Review menjadi <b>${afterRate.toFixed(2)}%</b>.
 </table>
 
 <p class="small">
-Target sudah memperhitungkan pesanan Transit + Terkirim.
+Target dihitung berdasarkan review aktif saat ini dan sudah mengurangi pesanan Transit + Terkirim.
 </p>
 
 </div>
 
 <h2>🚀 Recovery Plan</h2>
 
+<!-- Mode Hemat Cost -->
 <div class="plan green">
 
 <span class="badge">Rekomendasi</span>
@@ -537,13 +602,14 @@ Target sudah memperhitungkan pesanan Transit + Terkirim.
 <h3>🟢 Mode Hemat Cost</h3>
 
 <ul>
-<li>Target setelah window: <b>+${futureNeed}</b> order.</li>
-<li>Biarkan ${progress} order berjalan selesai.</li>
-<li>Evaluasi lagi setelah ${nearest===999?"window bergeser":nearest+" hari"}.</li>
+<li>Tunggu sekitar <b>${nearest===999?"beberapa":nearest} hari</b>.</li>
+<li>Target setelah rolling window: <b>+${futureNeed}</b> order.</li>
+<li>Biarkan <b>${progress}</b> order yang sedang berjalan selesai.</li>
 </ul>
 
 </div>
 
+<!-- Mode Seimbang -->
 <div class="plan yellow">
 
 <span class="badge">Recovery Bertahap</span>
@@ -551,12 +617,13 @@ Target sudah memperhitungkan pesanan Transit + Terkirim.
 <h3>🟡 Mode Seimbang</h3>
 
 <ul>
-<li>Target awal sekitar <b>+${balanced}</b> order.</li>
-<li>Target turun setelah window bergeser.</li>
+<li>Mulai recovery sekitar <b>+${balanced}</b> order.</li>
+<li>Target akan turun lagi setelah rolling window bergeser.</li>
 </ul>
 
 </div>
 
+<!-- Recovery Cepat -->
 <div class="plan red">
 
 <span class="badge">Agresif</span>
@@ -565,311 +632,25 @@ Target sudah memperhitungkan pesanan Transit + Terkirim.
 
 <ul>
 <li>Target sekitar <b>+${need30}</b> order.</li>
-<li>Cocok mengejar campaign.</li>
+<li>Cocok untuk seller yang sedang mengejar campaign.</li>
+<li>Fokus meningkatkan completed order secepat mungkin.</li>
 </ul>
 
 </div>
 
+<!-- Prioritas Recovery -->
 <div class="plan orange">
 
 <span class="badge">Prioritas Recovery</span>
 
-<h3>${near>=2?"🟢 Tunggu Window + Kejar Order Ringan":"🔴 Fokus Kejar Completed Order"}</h3>
-
-<p>
-${near>=2?`Ada ${near} review yang akan keluar dalam ≤15 hari.`:"Review masih relatif baru."}
-</p>
-
-<ul>
-<li>Biarkan ${progress} order berjalan selesai.</li>
-<li>Target setelah window menjadi sekitar <b>+${futureNeed}</b> order.</li>
-<li>Hindari review negatif baru.</li>
-</ul>
-
-</div>
-
-</div>
-`;
-
-}
-
-// Jalankan saat halaman dibuka
-calculate();
-
-</script>
-
-</body>
-</html>
-<script>
-// ===== Cek Login =====
-if(!localStorage.getItem("tra_token")){
-  window.location.href="login.html";
-}
-
-// ===== Logout =====
-function logout(){
-  localStorage.removeItem("tra_token");
-  window.location.href="login.html";
-}
-
-// ===== Review Default =====
-const box=document.getElementById("reviews");
-
-[
-"2026-07-16",
-"2026-07-23",
-"2026-07-27",
-"2026-07-31",
-"2026-08-13",
-"2026-08-14",
-"2026-08-16",
-"2026-08-30",
-"2026-09-01"
-].forEach(addReview);
-
-// ===== Tambah Review =====
-function addReview(v=""){
-  const d=document.createElement("div");
-  d.className="review";
-  d.innerHTML=`
-    <input type="date" value="${v}">
-    <button type="button" class="deleteBtn" onclick="removeReview(this)">✕</button>
-  `;
-  box.appendChild(d);
-}
-
-// ===== Hapus Review =====
-function removeReview(btn){
-  btn.parentElement.remove();
-  calculate();
-}
-
-// ===== Hitung =====
-function calculate(){
-
-  const completed=+document.getElementById("orders").value||0;
-  const transit=+document.getElementById("transit").value||0;
-  const delivered=+document.getElementById("delivered").value||0;
-  const returns=+document.getElementById("returns").value||0;
-
-  const progress=transit+delivered;
-  const projected=completed+progress;
-
-  let dates=[];
-
-  document.querySelectorAll("#reviews input").forEach(i=>{
-    if(i.value) dates.push(new Date(i.value));
-  });
-
-  dates.sort((a,b)=>a-b);
-
-  const today=new Date();
-
-  const active=dates.length;
-
-  let near=0;
-  let nearest=999;
-  let timeline="";
-
-  dates.forEach(d=>{
-
-    let exit=new Date(d);
-
-    exit.setDate(exit.getDate()+60);
-
-    let remain=Math.ceil((exit-today)/86400000);
-
-    if(remain>0&&remain<=15){
-      near++;
-      nearest=Math.min(nearest,remain);
-    }
-
-    timeline+=`
-      <tr>
-        <td>${d.toLocaleDateString("id-ID")}</td>
-        <td>${exit.toLocaleDateString("id-ID")}</td>
-        <td>${remain>0?remain+" hari":"Sudah keluar"}</td>
-      </tr>
-    `;
-
-  });
-
-  const nrr=((active/projected)*100)/2;
-  const ret=((returns/projected)*100)/2;
-
-  const after=Math.max(0,active-near);
-  const afterRate=((after/projected)*100)/2;
-
-  const need30=Math.max(0,Math.ceil(active/0.006)-projected);
-  const need40=Math.max(0,Math.ceil(active/0.008)-projected);
-  const need50=Math.max(0,Math.ceil(active/0.01)-projected);
-
-  const futureNeed=Math.max(0,Math.ceil(after/0.006)-projected);
-
-  const balanced=Math.round((need30+futureNeed)/2);
-
-  document.getElementById("output").innerHTML=`
-
-  <div class="card">
-
-    <h2>📊 Recovery Report</h2>
-
-    <div class="cards">
-
-      <div class="metric">
-        <h2>${projected}</h2>
-        <p>Projected Order</p>
-      </div>
-
-      <div class="metric">
-        <h2>${active}</h2>
-        <p>Review Aktif</p>
-      </div>
-
-      <div class="metric">
-        <h2>${nrr.toFixed(2)}%</h2>
-        <p>Negative Review</p>
-      </div>
-
-      <div class="metric">
-        <h2>${ret.toFixed(2)}%</h2>
-        <p>Return Rate</p>
-      </div>
-
-    </div>
-
-    <div class="box">
-
-      <table>
-
-        <tr><td>Completed Order</td><td>${completed}</td></tr>
-        <tr><td>Pesanan Transit</td><td>${transit}</td></tr>
-        <tr><td>Pesanan Terkirim</td><td>${delivered}</td></tr>
-        <tr><td><b>On Progress Order</b></td><td><b>${progress}</b></td></tr>
-        <tr><td><b>Projected Completed</b></td><td><b>${projected}</b></td></tr>
-        <tr><td>Review Aktif</td><td>${active}</td></tr>
-        <tr><td><b>Negative Review</b></td><td><b>${nrr.toFixed(2)}%</b></td></tr>
-        <tr><td>Target TikTok</td><td>0.30%</td></tr>
-        <tr><td><b>Return Rate</b></td><td><b>${ret.toFixed(2)}%</b></td></tr>
-        <tr><td>Target Return</td><td>0.40%</td></tr>
-
-      </table>
-
-    </div>
-
-    <div class="box">
-
-      <h3>📅 Kalender Recovery</h3>
-
-      <table>
-
-        <tr>
-          <th>Review</th>
-          <th>Keluar Window</th>
-          <th>Sisa Hari</th>
-        </tr>
-
-        ${timeline}
-
-      </table>
-
-    </div>
-
-    <div class="box">
-
-      <h3>📈 Simulasi Setelah Window</h3>
-
-      <p class="small">Review aktif setelah review terdekat keluar</p>
-
-      <h2>${after} Review</h2>
-
-      <p class="small">
-      Negative Review menjadi <b>${afterRate.toFixed(2)}%</b>
-      </p>
-
-    </div>
-
-    <div class="box">
-
-      <h3>🎯 Target Order Bertahap</h3>
-
-      <table>
-
-        <tr><td>Menuju 0,50%</td><td><b>+${need50}</b></td></tr>
-        <tr><td>Menuju 0,40%</td><td><b>+${need40}</b></td></tr>
-        <tr><td>Menuju 0,30%</td><td><b>+${need30}</b></td></tr>
-
-      </table>
-
-      <p class="small">
-      Target dihitung berdasarkan review aktif saat ini dan sudah mengurangi pesanan Transit + Terkirim.
-      </p>
-
-    </div>
-
-    <h2>🚀 Recovery Plan</h2>
-
-    <div class="plan green">
-      <span class="badge">Rekomendasi</span>
-      <h3>🟢 Mode Hemat Cost</h3>
-      <ul>
-        <li>Target setelah window: <b>+${futureNeed}</b> order.</li>
-        <li>Biarkan ${progress} order berjalan selesai.</li>
-        <li>Evaluasi lagi setelah ${nearest===999?"beberapa":nearest} hari.</li>
-      </ul>
-    </div>
-
-    <div class="plan yellow">
-      <span class="badge">Recovery Bertahap</span>
-      <h3>🟡 Mode Seimbang</h3>
-      <ul>
-        <li>Target awal sekitar <b>+${balanced}</b> order.</li>
-        <li>Target turun setelah window bergeser.</li>
-      </ul>
-    </div>
-
-    <div class="plan red">
-      <span class="badge">Agresif</span>
-      <h3>🔴 Mode Recovery Cepat</h3>
-      <ul>
-        <li>Target sekitar <b>+${need30}</b> order.</li>
-        <li>Cocok untuk seller yang sedang mengejar campaign.</li>
-      </ul>
-    </div>
-
-    <div class="plan orange">
-
-      <span class="badge">Prioritas Recovery</span>
-
-      <h3>${
-        near>=2
-        ?"🟢 Tunggu Window + Kejar Order Ringan"
-        :"🔴 Fokus Kejar Completed Order"
-      }</h3>
-
-      <p>${
-        near>=2
-        ?`Ada ${near} review yang akan keluar dalam ≤15 hari.`
-        :"Review masih relatif baru."
-      }</p>
-
-      <ul>
-        <li>Biarkan ${progress} order yang sedang berjalan selesai.</li>
-        <li>Target setelah ${nearest===999?"beberapa":nearest} hari turun menjadi sekitar <b>+${futureNeed}</b> order.</li>
-        <li>Hindari review negatif baru.</li>
-      </ul>
-
-    </div>
-
-  </div>
-
-  `;
-}
-
-// Jalankan otomatis pertama kali
-calculate();
-
-</script>
-
-</body>
-</html>
+<h3>${
+near>=2
+?"🟢 Tunggu Window + Recovery Ringan"
+:"🔴 Fokus Recovery Sekarang"
+}</h3>
+
+<p>${
+near>=2
+?`Ada $DIL1 review yang akan keluar dalam $DIL2 hari.`
+:"Belum ada review yang akan keluar dalam waktu dekat."
+}</p>
