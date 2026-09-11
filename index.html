@@ -149,88 +149,8 @@ output.innerHTML=`<div class="card"><h2>📊 Recovery Report</h2>
 <div class="plan red"><span class="badge">Agresif</span><h3>🔴 Mode Recovery Cepat</h3><ul><li>Target sekitar <b>+${need30}</b> order.</li><li>Cocok untuk seller yang sedang mengejar campaign.</li></ul></div>
 <div class="plan orange"><span class="badge">Prioritas Recovery</span><h3>${near>=2?"🟢 Tunggu Window + Kejar Order Ringan":"🔴 Fokus Kejar Completed Order"}</h3><p>${near>=2?`Ada ${near} review yang akan keluar dalam ≤15 hari.`:"Review masih relatif baru."}</p><ul><li>Biarkan ${progress} order yang sedang berjalan selesai.</li><li>Target setelah ${nearest} hari turun menjadi sekitar <b>+${futureNeed}</b> order.</li><li>Hindari review negatif baru.</li></ul></div></div>`;}
 calculate();
-  // Login ke API Cloudflare
-async function login(email, password) {
-  const deviceId =
-    localStorage.getItem("device_id") || crypto.randomUUID();
-
-  localStorage.setItem("device_id", deviceId);
-
-  const res = await fetch(
-    "https://rating-tiktok-advisor-api.bennywenngo.workers.dev/login",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        password,
-        deviceId
-      })
-    }
-  );
-
-  return await res.json();
-}
-
-async function doLogin() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const msg = document.getElementById("loginMsg");
-
-  msg.textContent = "";
-
-  try {
-    const res = await login(email, password);
-
-    if (res.success) {
-      localStorage.setItem("tra_token", res.token);
-      document.getElementById("loginOverlay").style.display = "none";
-      history.replaceState({}, "", "/");
-    } else {
-      msg.textContent = res.message || "Email atau Password salah";
-    }
-  } catch (err) {
-    msg.textContent = "Gagal terhubung ke server.";
-    console.error(err);
-  }
-}
-
-function goWA(){const phone="6287887788017";const text=encodeURIComponent(`Halo Admin TikTok Rating Advisor.
-
-Saya ingin aktivasi akun.
-
-Email saya:
-`);window.open(`https://wa.me/${phone}?text=${text}`,"_blank");}
-
-window.addEventListener("load", () => {
-  if (localStorage.getItem("tra_token")) {
-    document.getElementById("loginOverlay").style.display = "none";
-  }
-});
 </script>
 
-<div id="loginOverlay" style="position:fixed;inset:0;background:#0F1115;display:flex;justify-content:center;align-items:center;z-index:9999;">
-  <div style="width:360px;background:#171C22;padding:30px;border-radius:18px;border:1px solid #273244;">
-    <h2 style="color:#FF6B00;margin:0 0 20px;">TikTok Rating Advisor</h2>
-
-    <input id="email" type="email" placeholder="Email"
-      style="width:100%;padding:12px;margin-bottom:12px;border-radius:10px;border:none;background:#242A33;color:white;">
-
-    <input id="password" type="password" placeholder="Password"
-      style="width:100%;padding:12px;margin-bottom:16px;border-radius:10px;border:none;background:#242A33;color:white;">
-
-    <button onclick="doLogin()"
-      style="width:100%;padding:12px;border:none;border-radius:10px;background:#FF6B00;color:white;font-weight:bold;cursor:pointer;">
-      Masuk
-    </button>
-
-    <button class="wa-btn" onclick="goWA()" style="width:100%;padding:12px;border:none;border-radius:10px;color:white;font-weight:bold;cursor:pointer;">💬 Aktivasi Akun via WhatsApp</button>
-
-    <p id="loginMsg" style="color:#ff6b6b;margin-top:12px;"></p>
-  </div>
-</div>
 
 </body>
 </html>
