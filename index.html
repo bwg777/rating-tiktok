@@ -651,6 +651,23 @@ near>=2
 
 <p>${
 near>=2
-?`Ada $DIL1 review yang akan keluar dalam $DIL2 hari.`
+?`Ada ${near} review yang akan keluar dalam ≤15 hari.`
 :"Belum ada review yang akan keluar dalam waktu dekat."
 }</p>
+
+<ul>
+<li>Biarkan ${progress} order berjalan selesai.</li>
+<li>Target setelah rolling window menjadi sekitar <b>+${futureNeed}</b> order.</li>
+<li>Hindari review negatif baru.</li>
+</ul>
+
+</div>
+
+</div>`;
+}
+
+calculate();
+</script>
+
+</body>
+</html>
