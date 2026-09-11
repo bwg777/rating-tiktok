@@ -7,103 +7,25 @@
 
 <style>
 *{box-sizing:border-box}
-body{
-margin:0;
-background:#0F1115;
-color:#fff;
-font-family:Inter,Arial,sans-serif
-}
-.container{
-max-width:920px;
-margin:auto;
-padding:26px
-}
-.hero{
-background:linear-gradient(135deg,#111827,#0F1115);
-border:1px solid #273244;
-border-radius:26px;
-padding:30px;
-margin-bottom:22px
-}
-.hero h1{
-margin:0;
-color:#FF6B00;
-font-size:40px
-}
-.hero p{
-color:#B8C3CF;
-line-height:1.6
-}
-.notice{
-margin-top:20px;
-background:rgba(255,255,255,.04);
-border:1px solid #2A3442;
-border-radius:18px;
-padding:18px
-}
-.grid3{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-margin-top:14px
-}
-.kpi{
-padding:16px;
-border-radius:14px;
-text-align:center;
-background:#171C22;
-border:1px solid #2A3442
-}
-.kpi.active{
-background:rgba(255,107,0,.12);
-border-color:#FF6B00
-}
-.kpi h3{
-margin:0 0 6px
-}
-.kpi span{
-color:#FF6B00;
-font-weight:bold;
-font-size:20px
-}
-.card{
-background:#181C22;
-border:1px solid #262F3A;
-border-radius:22px;
-padding:24px;
-margin-bottom:22px
-}
+body{margin:0;background:#0F1115;color:#fff;font-family:Inter,Arial,sans-serif}
+.container{max-width:920px;margin:auto;padding:26px}
+.hero{background:linear-gradient(135deg,#111827,#0F1115);border:1px solid #273244;border-radius:26px;padding:30px;margin-bottom:22px}
+.hero h1{margin:0;color:#FF6B00;font-size:40px}
+.hero p{color:#B8C3CF;line-height:1.6}
+.notice{margin-top:20px;background:rgba(255,255,255,.04);border:1px solid #2A3442;border-radius:18px;padding:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.kpi{padding:16px;border-radius:14px;text-align:center;background:#171C22;border:1px solid #2A3442}
+.kpi.active{background:rgba(255,107,0,.12);border-color:#FF6B00}
+.kpi h3{margin:0 0 6px}
+.kpi span{color:#FF6B00;font-weight:bold;font-size:20px}
+.card{background:#181C22;border:1px solid #262F3A;border-radius:22px;padding:24px;margin-bottom:22px}
 h2{margin:0 0 18px}
 h3{margin:0 0 14px}
-label{
-display:block;
-color:#D8DEE7;
-font-size:14px;
-margin-bottom:6px
-}
-input{
-width:100%;
-padding:13px;
-background:#242A33;
-border:1px solid transparent;
-border-radius:12px;
-color:#fff;
-margin-bottom:14px
-}
-input:focus{
-outline:none;
-border-color:#FF6B00
-}
-.review{
-display:flex;
-gap:10px;
-align-items:center;
-margin-bottom:10px
-}
-.review input{
-flex:1;
-margin-bottom:0
-}
+label{display:block;color:#D8DEE7;font-size:14px;margin-bottom:6px}
+input{width:100%;padding:13px;background:#242A33;border:1px solid transparent;border-radius:12px;color:#fff;margin-bottom:14px}
+input:focus{outline:none;border-color:#FF6B00}
+.review{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.review input{flex:1;margin-bottom:0}
 .deleteBtn{
 width:42px;
 height:42px;
@@ -130,9 +52,7 @@ border-radius:12px;
 font-weight:bold;
 cursor:pointer
 }
-button.secondary{
-background:#252C35
-}
+button.secondary{background:#252C35}
 .cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
@@ -146,15 +66,8 @@ border-radius:16px;
 padding:18px;
 text-align:center
 }
-.metric h2{
-color:#FF6B00;
-font-size:30px;
-margin:0
-}
-.metric p{
-margin:6px 0 0;
-color:#9BA7B5
-}
+.metric h2{color:#FF6B00;font-size:30px;margin:0}
+.metric p{margin:6px 0 0;color:#9BA7B5}
 .box{
 background:#13181E;
 border:1px solid #252E38;
@@ -162,19 +75,13 @@ border-radius:16px;
 padding:18px;
 margin-top:18px
 }
-table{
-width:100%;
-border-collapse:collapse
-}
+table{width:100%;border-collapse:collapse}
 th,td{
 padding:11px;
 border-bottom:1px solid #2C3440;
 font-size:14px
 }
-th{
-text-align:left;
-color:#AEB8C5
-}
+th{text-align:left;color:#AEB8C5}
 .plan{
 border-radius:18px;
 padding:18px;
@@ -192,11 +99,7 @@ background:rgba(255,255,255,.16);
 font-size:12px;
 margin-bottom:10px
 }
-.small{
-color:#9CA8B6;
-font-size:13px;
-line-height:1.6
-}
+.small{color:#9CA8B6;font-size:13px;line-height:1.6}
 .wa-btn{
 width:100%;
 margin-top:10px;
@@ -217,15 +120,27 @@ background:#25D366!important
 <div class="container">
 
 <div class="hero">
-<h1>TikTok Rating Advisor</h1>
+
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:10px;">
+<h1 style="margin:0;">TikTok Rating Advisor</h1>
+
+<button onclick="logout()" class="secondary">
+Logout
+</button>
+</div>
+
 <p>Strategi recovery <b>Rating Produk</b> TikTok Shop berdasarkan sistem rolling window 60 hari.</p>
 
 <div class="notice">
+
 <b>⚠️ Tools ini khusus menghitung metrik Produk.</b>
 
-<p>Rating Toko terdiri dari 3 kategori. Tools ini fokus pada <b>Produk (60%)</b> karena memiliki bobot terbesar terhadap performa toko.</p>
+<p>
+Rating Toko terdiri dari 3 kategori. Tools ini fokus pada <b>Produk (60%)</b> karena memiliki bobot terbesar terhadap performa toko.
+</p>
 
 <div class="grid3">
+
 <div class="kpi active">
 <h3>📦 Produk</h3>
 <span>60%</span>
@@ -240,12 +155,13 @@ background:#25D366!important
 <h3>🎧 Layanan</h3>
 <span style="color:#B8C3CF">20%</span>
 </div>
-</div>
 
+</div>
 </div>
 </div>
 
 <div class="card">
+
 <h2>Bagaimana TikTok menghitung Rating Produk?</h2>
 
 <p class="small">
@@ -253,15 +169,18 @@ TikTok menggunakan rolling window 60 hari. Review 1⭐–2⭐ hanya dihitung sel
 </p>
 
 <div class="box">
+
 <b>Contoh sederhana</b>
 
 <p class="small">
 1.000 Completed Order + 9 Review Negatif → 9÷1000=0,90%. Karena KPI Produk terdiri dari 2 indikator, metrik Review Negatif yang tampil menjadi sekitar <b>0,45%</b>.
 </p>
+
 </div>
 </div>
 
 <div class="card">
+
 <h2>Input Data Toko</h2>
 
 <label>Completed Order (60 Hari)</label>
@@ -282,14 +201,42 @@ TikTok menggunakan rolling window 60 hari. Review 1⭐–2⭐ hanya dihitung sel
 
 <button onclick="addReview()">+ Tambah Review</button>
 <button class="secondary" onclick="calculate()">Analisis Toko</button>
+
 </div>
 
 <div id="output"></div>
+
 </div>
 <script>
-const box = document.getElementById("reviews");
 
-// Review bawaan
+// =========================
+// LOGIN GUARD
+// =========================
+
+const token = localStorage.getItem("tra_token");
+const license = localStorage.getItem("tra_license");
+
+if(!token || !license){
+  window.location.href="/login.html";
+}
+
+// =========================
+// LOGOUT
+// =========================
+
+function logout(){
+  localStorage.removeItem("tra_token");
+  localStorage.removeItem("tra_license");
+  localStorage.removeItem("tra_device");
+  window.location.href="/login.html";
+}
+
+// =========================
+// REVIEW LIST
+// =========================
+
+const box=document.getElementById("reviews");
+
 [
 "2026-07-16",
 "2026-07-23",
@@ -303,19 +250,28 @@ const box = document.getElementById("reviews");
 ].forEach(addReview);
 
 function addReview(value=""){
+
 const row=document.createElement("div");
+
 row.className="review";
+
 row.innerHTML=`
 <input type="date" value="${value}">
 <button type="button" class="deleteBtn" onclick="removeReview(this)">✕</button>
 `;
+
 box.appendChild(row);
+
 }
 
 function removeReview(btn){
 btn.parentElement.remove();
 calculate();
 }
+
+// =========================
+// PERHITUNGAN
+// =========================
 
 function calculate(){
 
@@ -328,6 +284,7 @@ const progress=transit+delivered;
 const projected=completed+progress;
 
 let dates=[];
+
 document.querySelectorAll("#reviews input").forEach(el=>{
 if(el.value) dates.push(new Date(el.value));
 });
@@ -376,6 +333,7 @@ const futureNeed=Math.max(0,Math.ceil(after/0.006)-projected);
 const balanced=Math.round((need30+futureNeed)/2);
 
 document.getElementById("output").innerHTML=`
+
 <div class="card">
 
 <h2>📊 Recovery Report</h2>
@@ -547,11 +505,13 @@ ${near>=2?`Ada ${near} review yang akan keluar dalam ≤15 hari.`:"Review masih 
 </div>
 
 </div>
+
 `;
 
 }
 
 calculate();
+
 </script>
 </body>
 </html>
