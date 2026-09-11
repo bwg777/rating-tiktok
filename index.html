@@ -7,25 +7,93 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0F1115;color:#fff;font-family:Inter,Arial,sans-serif}
+body{
+margin:0;
+background:#0F1115;
+color:#fff;
+font-family:Inter,Arial,sans-serif;
+}
 .container{max-width:920px;margin:auto;padding:26px}
 .hero{background:linear-gradient(135deg,#111827,#0F1115);border:1px solid #273244;border-radius:26px;padding:30px;margin-bottom:22px}
 .hero h1{margin:0;color:#FF6B00;font-size:40px}
 .hero p{color:#B8C3CF;line-height:1.6}
-.notice{margin-top:20px;background:rgba(255,255,255,.04);border:1px solid #2A3442;border-radius:18px;padding:18px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
-.kpi{padding:16px;border-radius:14px;text-align:center;background:#171C22;border:1px solid #2A3442}
-.kpi.active{background:rgba(255,107,0,.12);border-color:#FF6B00}
+
+.notice{
+margin-top:20px;
+background:rgba(255,255,255,.04);
+border:1px solid #2A3442;
+border-radius:18px;
+padding:18px;
+}
+
+.grid3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:14px;
+}
+
+.kpi{
+padding:16px;
+border-radius:14px;
+text-align:center;
+background:#171C22;
+border:1px solid #2A3442;
+}
+
+.kpi.active{
+background:rgba(255,107,0,.12);
+border-color:#FF6B00;
+}
+
 .kpi h3{margin:0 0 6px}
 .kpi span{color:#FF6B00;font-weight:bold;font-size:20px}
-.card{background:#181C22;border:1px solid #262F3A;border-radius:22px;padding:24px;margin-bottom:22px}
+
+.card{
+background:#181C22;
+border:1px solid #262F3A;
+border-radius:22px;
+padding:24px;
+margin-bottom:22px;
+}
+
 h2{margin:0 0 18px}
 h3{margin:0 0 14px}
-label{display:block;color:#D8DEE7;font-size:14px;margin-bottom:6px}
-input{width:100%;padding:13px;background:#242A33;border:1px solid transparent;border-radius:12px;color:#fff;margin-bottom:14px}
-input:focus{outline:none;border-color:#FF6B00}
-.review{display:flex;gap:10px;align-items:center;margin-bottom:10px}
-.review input{flex:1;margin-bottom:0}
+
+label{
+display:block;
+color:#D8DEE7;
+font-size:14px;
+margin-bottom:6px;
+}
+
+input{
+width:100%;
+padding:13px;
+background:#242A33;
+border:1px solid transparent;
+border-radius:12px;
+color:#fff;
+margin-bottom:14px;
+}
+
+input:focus{
+outline:none;
+border-color:#FF6B00;
+}
+
+.review{
+display:flex;
+gap:10px;
+align-items:center;
+margin-bottom:10px;
+}
+
+.review input{
+flex:1;
+margin-bottom:0;
+}
+
 .deleteBtn{
 width:42px;
 height:42px;
@@ -37,12 +105,14 @@ cursor:pointer;
 font-size:18px;
 font-weight:bold;
 flex-shrink:0;
-transition:.2s
+transition:.2s;
 }
+
 .deleteBtn:hover{
 background:#E5484D;
-transform:scale(1.05)
+transform:scale(1.05);
 }
+
 button{
 background:#FF6B00;
 color:#fff;
@@ -50,62 +120,83 @@ border:none;
 padding:13px 18px;
 border-radius:12px;
 font-weight:bold;
-cursor:pointer
+cursor:pointer;
 }
-button.secondary{background:#252C35}
+
+button.secondary{
+background:#252C35;
+}
+
 .cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:14px;
-margin-bottom:18px
+margin-bottom:18px;
 }
+
 .metric{
 background:#13181E;
 border:1px solid #252E38;
 border-radius:16px;
 padding:18px;
-text-align:center
+text-align:center;
 }
-.metric h2{color:#FF6B00;font-size:30px;margin:0}
-.metric p{margin:6px 0 0;color:#9BA7B5}
+
+.metric h2{
+color:#FF6B00;
+font-size:30px;
+margin:0;
+}
+
+.metric p{
+margin:6px 0 0;
+color:#9BA7B5;
+}
+
 .box{
 background:#13181E;
 border:1px solid #252E38;
 border-radius:16px;
 padding:18px;
-margin-top:18px
+margin-top:18px;
 }
-table{width:100%;border-collapse:collapse}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
 th,td{
 padding:11px;
 border-bottom:1px solid #2C3440;
-font-size:14px
+font-size:14px;
 }
-th{text-align:left;color:#AEB8C5}
-.plan{
-border-radius:18px;
-padding:18px;
-margin-top:16px
+
+th{
+text-align:left;
+color:#AEB8C5;
 }
+
+.plan{border-radius:18px;padding:18px;margin-top:16px}
 .green{background:#173326;border:1px solid #2F7A53}
 .yellow{background:#3B2E12;border:1px solid #A68A28}
 .red{background:#3B1717;border:1px solid #A83D3D}
 .orange{background:linear-gradient(135deg,#FF7A1A,#FF922E)}
+
 .badge{
 display:inline-block;
 padding:6px 10px;
 border-radius:999px;
 background:rgba(255,255,255,.16);
 font-size:12px;
-margin-bottom:10px
+margin-bottom:10px;
 }
-.small{color:#9CA8B6;font-size:13px;line-height:1.6}
-.wa-btn{
-width:100%;
-margin-top:10px;
-background:#25D366!important
+
+.small{
+color:#9CA8B6;
+font-size:13px;
+line-height:1.6;
 }
-.wa-btn:hover{opacity:.9}
 
 @media(max-width:720px){
 .grid3{grid-template-columns:1fr}
@@ -117,27 +208,32 @@ background:#25D366!important
 
 <body>
 
+<script>
+if(!localStorage.getItem("tra_token")){
+location.replace("login.html");
+}
+</script>
+
 <div class="container">
 
 <div class="hero">
 
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:10px;">
-<h1 style="margin:0;">TikTok Rating Advisor</h1>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
 
-<button onclick="logout()" class="secondary">
-Logout
-</button>
+<div>
+<h1>TikTok Rating Advisor</h1>
+<p>Strategi recovery <b>Rating Produk</b> TikTok Shop berdasarkan sistem rolling window 60 hari.</p>
 </div>
 
-<p>Strategi recovery <b>Rating Produk</b> TikTok Shop berdasarkan sistem rolling window 60 hari.</p>
+<button class="secondary" onclick="logout()">Logout</button>
+
+</div>
 
 <div class="notice">
 
 <b>⚠️ Tools ini khusus menghitung metrik Produk.</b>
 
-<p>
-Rating Toko terdiri dari 3 kategori. Tools ini fokus pada <b>Produk (60%)</b> karena memiliki bobot terbesar terhadap performa toko.
-</p>
+<p>Rating Toko terdiri dari 3 kategori. Tools ini fokus pada <b>Produk (60%)</b> karena memiliki bobot terbesar terhadap performa toko.</p>
 
 <div class="grid3">
 
@@ -157,7 +253,9 @@ Rating Toko terdiri dari 3 kategori. Tools ini fokus pada <b>Produk (60%)</b> ka
 </div>
 
 </div>
+
 </div>
+
 </div>
 
 <div class="card">
@@ -177,6 +275,7 @@ TikTok menggunakan rolling window 60 hari. Review 1⭐–2⭐ hanya dihitung sel
 </p>
 
 </div>
+
 </div>
 
 <div class="card">
@@ -209,32 +308,6 @@ TikTok menggunakan rolling window 60 hari. Review 1⭐–2⭐ hanya dihitung sel
 </div>
 <script>
 
-// =========================
-// LOGIN GUARD
-// =========================
-
-const token = localStorage.getItem("tra_token");
-const license = localStorage.getItem("tra_license");
-
-if(!token || !license){
-  window.location.href="/login.html";
-}
-
-// =========================
-// LOGOUT
-// =========================
-
-function logout(){
-  localStorage.removeItem("tra_token");
-  localStorage.removeItem("tra_license");
-  localStorage.removeItem("tra_device");
-  window.location.href="/login.html";
-}
-
-// =========================
-// REVIEW LIST
-// =========================
-
 const box=document.getElementById("reviews");
 
 [
@@ -248,6 +321,22 @@ const box=document.getElementById("reviews");
 "2026-08-30",
 "2026-09-01"
 ].forEach(addReview);
+
+// =========================
+// LOGOUT (Langkah 4)
+// =========================
+
+function logout(){
+
+localStorage.removeItem("tra_token");
+
+window.location.href="login.html";
+
+}
+
+// =========================
+// REVIEW
+// =========================
 
 function addReview(value=""){
 
@@ -265,71 +354,96 @@ box.appendChild(row);
 }
 
 function removeReview(btn){
+
 btn.parentElement.remove();
+
 calculate();
+
 }
 
 // =========================
-// PERHITUNGAN
+// CALCULATE
 // =========================
 
 function calculate(){
 
-const completed=Number(document.getElementById("orders").value)||0;
-const transit=Number(document.getElementById("transit").value)||0;
-const delivered=Number(document.getElementById("delivered").value)||0;
-const returns=Number(document.getElementById("returns").value)||0;
+const completed=+document.getElementById("orders").value||0;
+
+const transit=+document.getElementById("transit").value||0;
+
+const delivered=+document.getElementById("delivered").value||0;
+
+const returns=+document.getElementById("returns").value||0;
 
 const progress=transit+delivered;
+
 const projected=completed+progress;
 
 let dates=[];
 
-document.querySelectorAll("#reviews input").forEach(el=>{
-if(el.value) dates.push(new Date(el.value));
+document.querySelectorAll(".review input").forEach(i=>{
+
+if(i.value){
+
+dates.push(new Date(i.value));
+
+}
+
 });
 
 dates.sort((a,b)=>a-b);
 
 const today=new Date();
 
-let active=dates.length;
+const active=dates.length;
+
 let near=0;
+
 let nearest=999;
+
 let timeline="";
 
 dates.forEach(d=>{
 
-const expire=new Date(d);
-expire.setDate(expire.getDate()+60);
+const exit=new Date(d);
 
-const remain=Math.ceil((expire-today)/86400000);
+exit.setDate(exit.getDate()+60);
+
+const remain=Math.ceil((exit-today)/86400000);
 
 if(remain>0 && remain<=15){
+
 near++;
+
 nearest=Math.min(nearest,remain);
+
 }
 
 timeline+=`
 <tr>
 <td>${d.toLocaleDateString("id-ID")}</td>
-<td>${expire.toLocaleDateString("id-ID")}</td>
+<td>${exit.toLocaleDateString("id-ID")}</td>
 <td>${remain>0?remain+" hari":"Sudah keluar"}</td>
 </tr>`;
 
 });
 
 const nrr=((active/projected)*100)/2;
+
 const returnRate=((returns/projected)*100)/2;
 
 const after=Math.max(0,active-near);
+
 const afterRate=((after/projected)*100)/2;
 
-const need50=Math.max(0,Math.ceil(active/0.01)-projected);
-const need40=Math.max(0,Math.ceil(active/0.008)-projected);
 const need30=Math.max(0,Math.ceil(active/0.006)-projected);
 
+const need40=Math.max(0,Math.ceil(active/0.008)-projected);
+
+const need50=Math.max(0,Math.ceil(active/0.01)-projected);
+
 const futureNeed=Math.max(0,Math.ceil(after/0.006)-projected);
+
 const balanced=Math.round((need30+futureNeed)/2);
 
 document.getElementById("output").innerHTML=`
@@ -367,14 +481,23 @@ document.getElementById("output").innerHTML=`
 <table>
 
 <tr><td>Completed Order</td><td>${completed}</td></tr>
+
 <tr><td>Pesanan Transit</td><td>${transit}</td></tr>
+
 <tr><td>Pesanan Terkirim</td><td>${delivered}</td></tr>
+
 <tr><td><b>On Progress Order</b></td><td><b>${progress}</b></td></tr>
+
 <tr><td><b>Projected Completed</b></td><td><b>${projected}</b></td></tr>
+
 <tr><td>Review Aktif</td><td>${active}</td></tr>
+
 <tr><td><b>Negative Review</b></td><td><b>${nrr.toFixed(2)}%</b></td></tr>
+
 <tr><td>Target TikTok</td><td>0.30%</td></tr>
+
 <tr><td><b>Return Rate</b></td><td><b>${returnRate.toFixed(2)}%</b></td></tr>
+
 <tr><td>Target Return</td><td>0.40%</td></tr>
 
 </table>
@@ -388,9 +511,13 @@ document.getElementById("output").innerHTML=`
 <table>
 
 <tr>
+
 <th>Review</th>
+
 <th>Keluar Window</th>
+
 <th>Sisa Hari</th>
+
 </tr>
 
 ${timeline}
@@ -403,18 +530,15 @@ ${timeline}
 
 <h3>📈 Simulasi Setelah Window</h3>
 
-<p class="small">
-Review aktif setelah review terdekat keluar
-</p>
+<p class="small">Review aktif setelah review terdekat keluar.</p>
 
 <h2>${after} Review</h2>
 
-<p class="small">
-Negative Review menjadi <b>${afterRate.toFixed(2)}%</b>
-</p>
+<p class="small">Negative Review menjadi <b>${afterRate.toFixed(2)}%</b>.</p>
 
 </div>
-
+`;
+}
 <div class="box">
 
 <h3>🎯 Target Order Bertahap</h3>
@@ -454,8 +578,8 @@ Target dihitung berdasarkan review aktif saat ini dan sudah mengurangi pesanan T
 
 <ul>
 <li>Target setelah window: <b>+${futureNeed}</b> order.</li>
-<li>Biarkan ${progress} order berjalan selesai.</li>
-<li>Evaluasi lagi setelah ${nearest===999?"beberapa":nearest} hari.</li>
+<li>Biarkan <b>${progress}</b> order berjalan selesai.</li>
+<li>Evaluasi lagi setelah <b>${nearest}</b> hari.</li>
 </ul>
 
 </div>
@@ -468,7 +592,7 @@ Target dihitung berdasarkan review aktif saat ini dan sudah mengurangi pesanan T
 
 <ul>
 <li>Target awal sekitar <b>+${balanced}</b> order.</li>
-<li>Target turun setelah window bergeser.</li>
+<li>Target akan turun setelah review keluar dari rolling window.</li>
 </ul>
 
 </div>
@@ -490,15 +614,21 @@ Target dihitung berdasarkan review aktif saat ini dan sudah mengurangi pesanan T
 
 <span class="badge">Prioritas Recovery</span>
 
-<h3>${near>=2?"🟢 Tunggu Window + Kejar Order Ringan":"🔴 Fokus Kejar Completed Order"}</h3>
+<h3>${
+near>=2
+?"🟢 Tunggu Window + Kejar Order Ringan"
+:"🔴 Fokus Kejar Completed Order"
+}</h3>
 
-<p>
-${near>=2?`Ada ${near} review yang akan keluar dalam ≤15 hari.`:"Review masih relatif baru."}
-</p>
+<p>${
+near>=2
+?`Ada ${near} review yang akan keluar dalam ≤15 hari.`
+:"Review masih relatif baru."
+}</p>
 
 <ul>
-<li>Biarkan ${progress} order yang sedang berjalan selesai.</li>
-<li>Target setelah ${nearest===999?"beberapa":nearest} hari turun menjadi sekitar <b>+${futureNeed}</b> order.</li>
+<li>Biarkan <b>${progress}</b> order yang sedang berjalan selesai.</li>
+<li>Target setelah <b>${nearest}</b> hari turun menjadi sekitar <b>+${futureNeed}</b> order.</li>
 <li>Hindari review negatif baru.</li>
 </ul>
 
@@ -510,8 +640,10 @@ ${near>=2?`Ada ${near} review yang akan keluar dalam ≤15 hari.`:"Review masih 
 
 }
 
+// Jalankan otomatis saat halaman dibuka
 calculate();
 
 </script>
+
 </body>
 </html>
