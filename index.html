@@ -18,7 +18,33 @@ h2{margin:0 0 18px}h3{margin:0 0 14px}
 label{display:block;color:#D8DEE7;font-size:14px;margin-bottom:6px}
 input{width:100%;padding:13px;background:#242A33;border:1px solid transparent;border-radius:12px;color:#fff;margin-bottom:14px}
 input:focus{outline:none;border-color:#FF6B00}
-.review{display:flex;gap:8px}
+.review{
+display:flex;
+gap:10px;
+align-items:center;
+margin-bottom:10px;
+}
+.review input{
+flex:1;
+margin-bottom:0;
+}
+.deleteBtn{
+width:42px;
+height:42px;
+border:none;
+border-radius:10px;
+background:#2A3442;
+color:white;
+cursor:pointer;
+font-size:18px;
+font-weight:bold;
+flex-shrink:0;
+transition:.2s;
+}
+.deleteBtn:hover{
+background:#E5484D;
+transform:scale(1.05);
+}
 button{background:#FF6B00;color:#fff;border:none;padding:13px 18px;border-radius:12px;font-weight:bold;cursor:pointer}
 button.secondary{background:#252C35}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px}
@@ -75,7 +101,19 @@ table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px s
 <script>
 const box=document.getElementById("reviews");
 ["2026-07-16","2026-07-23","2026-07-27","2026-07-31","2026-08-13","2026-08-14","2026-08-16","2026-08-30","2026-09-01"].forEach(addReview);
-function addReview(v=""){let d=document.createElement("div");d.className="review";d.innerHTML=`<input type="date" value="${v}">`;box.appendChild(d);}
+function addReview(v=""){
+let d=document.createElement("div");
+d.className="review";
+d.innerHTML=`
+<input type="date" value="${v}">
+<button type="button" class="deleteBtn" onclick="removeReview(this)">✕</button>
+`;
+box.appendChild(d);
+}
+function removeReview(btn){
+btn.parentElement.remove();
+calculate();
+}
 function calculate(){
 const completed=+orders.value||0,transit=+document.getElementById("transit").value||0,delivered=+document.getElementById("delivered").value||0,returns=+document.getElementById("returns").value||0;
 const progress=transit+delivered,projected=completed+progress;
